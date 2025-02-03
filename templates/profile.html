@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container-fluid p-4">
+    <div class="profile-header">
+        <h1>My Profile</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="stats-card">
+                <div class="text-center mb-4">
+                    {% if session.get('user', {}).get('photo_url') %}
+                        <img src="{{ session['user']['photo_url'] }}" class="profile-image" alt="Profile Picture">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='images/default-avatar.png') }}" class="profile-image" alt="Default Avatar">
+                    {% endif %}
+                </div>
+                <h3 class="text-center">{{ session.get('user', {}).get('display_name') or session.get('user', {}).get('user_email') }}</h3>
+                <p class="text-center text-muted">Kannada Learner</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

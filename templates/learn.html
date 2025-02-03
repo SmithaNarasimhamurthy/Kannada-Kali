@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container-fluid p-4">
+    <h1 class="mb-4">Learn Kannada - Animals</h1>
+    <div class="row">
+        {% for word in words %}
+        <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card word-card">
+                <img src="{{ word.image_url }}" class="card-img-top" alt="{{ word.english }}">
+                <div class="card-body">
+                    <h5 class="card-title kannada-word">{{ word.kannada }}</h5>
+                    <p class="card-text">
+                        <strong>English:</strong> {{ word.english }}<br>
+                        <strong>Category:</strong> {{ word.category }}<br>
+                        <strong>Transliteration:</strong> {{ word.transliteration }}
+                    </p>
+                    <button class="btn btn-primary audio-btn" data-audio-url="{{ word.audio_url }}">
+                        <i class="fas fa-volume-up"></i> Listen
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<audio id="audioPlayer" style="display:none;"></audio>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const audioPlayer = document.getElementById('audioPlayer');
+        const audioBtns = document.querySelectorAll('.audio-btn');
+        
+        audioBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const audioUrl = this.getAttribute('data-audio-url');
+                
+                // Check audio availability before playing
+                fetch('/check_audio', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ audio_url: audioUrl })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status) {
+                        // Stop any currently playing audio
+                        audioBtns.forEach(otherBtn => {
+                            otherBtn.classList.remove('btn-success');
+                            otherBtn.classList.add('btn-primary');
+                        });
+                        
+                        // Change button state
+                        this.classList.remove('btn-primary');
+                        this.classList.add('btn-success');
+                        
+                        // Play audio
+                        audioPlayer.src = audioUrl;
+                        audioPlayer.play();
+                    } else {
+                        // Show error message
+                        this.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Audio Unavailable';
+                        this.classList.remove('btn-primary');
+                        this.classList.add('btn-warning');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    this.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error';
+                    this.classList.remove('btn-primary');
+                    this.classList.add('btn-danger');
+                });
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,40 @@
+.quiz-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.quiz-card {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    border-radius: 20px;
+}
+
+.quiz-progress .progress {
+    height: 10px;
+    border-radius: 5px;
+    background-color: #e9ecef;
+}
+
+.quiz-progress .progress-bar {
+    background-color: var(--accent-color);
+}
+
+.quiz-result-container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.quiz-result-card {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    border-radius: 20px;
+}
+
+.score-display h3 {
+    color: var(--accent-color);
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.score-display .lead {
+    color: var(--text-color);
+    opacity: 0.7;
+}
